@@ -1,0 +1,47 @@
+apply plugin: 'java'
+
+dependencies {
+    compile gradleApi()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        java {
+            srcDir 'src/test/java'
+        }
+        resources {
+            srcDir 'src/test/resources'
+        }
+    }
+}
+
+apply plugin: 'maven'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+	compile 'org.seleniumhq.selenium:selenium-java:3.0.1'
+	compile 'io.appium:java-client:4.1.2'
+   	compile 'info.cukes:cucumber-picocontainer:1.2.5'
+   	compile 'info.cukes:cucumber-junit:1.2.5'
+   	compile 'info.cukes:cucumber-testng:1.2.5'
+   	compile 'junit:junit:4.12'
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
