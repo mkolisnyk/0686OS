@@ -50,5 +50,10 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.2</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.testng</groupId>
+		    <artifactId>testng</artifactId>
+		    <version>6.9.13.6</version>
+		</dependency>
 	</dependencies>
 </project>

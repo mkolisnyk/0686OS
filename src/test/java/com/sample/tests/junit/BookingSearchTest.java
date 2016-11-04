@@ -1,9 +1,14 @@
-package com.sample.tests;
+package com.sample.tests.junit;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -12,8 +17,21 @@ import org.openqa.selenium.support.ui.Select;
 import com.sample.framework.Configuration;
 import com.sample.framework.Driver;
 
+@RunWith(Parameterized.class)
 public class BookingSearchTest {
 	private WebDriver driver;
+	private String destination;
+	private boolean isLeisure;
+	private int numberOfAdults;
+
+	public BookingSearchTest(String destination, boolean isLeisure,
+			int numberOfAdults) {
+		super();
+		this.destination = destination;
+		this.isLeisure = isLeisure;
+		this.numberOfAdults = numberOfAdults;
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		Configuration.load();
@@ -31,17 +49,20 @@ public class BookingSearchTest {
 	public void tearDown() {
 		driver.quit();
 	}
+	@Parameters
+    public static Collection<Object[]> getParameters() {
+        return Arrays.asList(
+            new Object[][] {
+            		{"London", true, 2 },
+            		{"Manchester", false, 1 },
+            });
+    }
+	
 	@Test
 	public void testValidSearch() {
-		// 1) Record test
-		// 2) Add drivers
-		// 3) Initialize webdriver
-		// 4) Update long locators (date selection and search button)
-		// 5) Move pre- and postconditions to setUp and teardown methods
-		
 		driver.findElement(By.id("ss")).click();
 		driver.findElement(By.id("ss")).clear();
-		driver.findElement(By.id("ss")).sendKeys("london");
+		driver.findElement(By.id("ss")).sendKeys(this.destination);
 		driver.findElement(
 				By.cssSelector("i.sb-date-field__chevron.bicon-downchevron"))
 				.click();
@@ -49,18 +70,18 @@ public class BookingSearchTest {
 		driver.findElement(
 				By.xpath("//table[@class='c2-month-table']//td[contains(@class, 'c2-day-s-today')]"))
 				.click();
-		driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[2]"))
-				.click();
-		driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[2]"))
-				.click();
-		driver.findElement(By.xpath("(//input[@name='nflt'])[2]")).click();
+		if (this.isLeisure) {
+			driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[2]"))
+					.click();
+		} else {
+			driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[1]"))
+					.click();
+		}
 		driver.findElement(By.xpath("(//input[@name='nflt'])[2]")).click();
 		new Select(driver.findElement(By.id("group_adults")))
-				.selectByVisibleText("1");
-		new Select(driver.findElement(By.id("group_adults")))
-				.selectByVisibleText("1");
+				.selectByVisibleText("" + this.numberOfAdults);
 		driver.findElement(
-				By.cssSelector("#group_adults > option[value=\"1\"]")).click();
+				By.cssSelector("#group_adults > option[value=\"" + this.numberOfAdults + "\"]")).click();
 		driver.findElement(By.xpath("//button[@type='submit']"))
 				.click();
 		driver.findElement(By.id("ss")).click();
