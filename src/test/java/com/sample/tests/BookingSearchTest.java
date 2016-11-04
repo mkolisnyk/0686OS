@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.Select;
 
@@ -12,6 +13,10 @@ public class BookingSearchTest {
 
 	@Test
 	public void testValidSearch() {
+		// 1) Record test
+		// 2) Add drivers
+		// 3) Initialize webdriver
+		// 4) Update long locators (date selection and search button)
 		String baseUrl = "http://booking.com";
 		System.setProperty("webdriver.gecko.driver", new File("drivers/geckodriver").getAbsolutePath());
 		System.setProperty("webdriver.chrome.driver", new File("drivers/chromedriver").getAbsolutePath());
