@@ -1,6 +1,8 @@
 package com.sample.tests;
 import java.io.File;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,20 +12,29 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.Select;
 
 public class BookingSearchTest {
-
+	private WebDriver driver;
+	@Before
+	public void setUp() {
+		String baseUrl = "http://booking.com";
+		System.setProperty("webdriver.gecko.driver", new File("drivers/geckodriver").getAbsolutePath());
+		System.setProperty("webdriver.chrome.driver", new File("drivers/chromedriver").getAbsolutePath());
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		driver = new ChromeDriver(cap);
+		driver.get(baseUrl);
+	}
+	@After
+	public void tearDown() {
+		driver.quit();
+	}
 	@Test
 	public void testValidSearch() {
 		// 1) Record test
 		// 2) Add drivers
 		// 3) Initialize webdriver
 		// 4) Update long locators (date selection and search button)
-		String baseUrl = "http://booking.com";
-		System.setProperty("webdriver.gecko.driver", new File("drivers/geckodriver").getAbsolutePath());
-		System.setProperty("webdriver.chrome.driver", new File("drivers/chromedriver").getAbsolutePath());
+		// 5) Move pre- and postconditions to setUp and teardown methods
 		
-		DesiredCapabilities cap = new DesiredCapabilities();
-		WebDriver driver = new ChromeDriver(cap);
-		driver.get(baseUrl);
 		driver.findElement(By.id("ss")).click();
 		driver.findElement(By.id("ss")).clear();
 		driver.findElement(By.id("ss")).sendKeys("london");
@@ -49,7 +60,6 @@ public class BookingSearchTest {
 		driver.findElement(By.xpath("//button[@type='submit']"))
 				.click();
 		driver.findElement(By.id("ss")).click();
-		driver.close();
 	}
 
 }
