@@ -3,6 +3,7 @@ package com.sample.framework;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -17,8 +18,10 @@ public final class Driver {
 	private Driver() {
 	}
 
-	private static WebDriver driver;
+	private static ConcurrentHashMap<String, WebDriver> driverThreadMap = new ConcurrentHashMap<String, WebDriver>();
 	private static final Map<String, Class<?>> driverMap = new HashMap<String, Class<?>>() {
+		private static final long serialVersionUID = 1L;
+
 		{
 			put("chrome", ChromeDriver.class);
 			put("firefox", FirefoxDriver.class);
@@ -27,11 +30,17 @@ public final class Driver {
 			put("opera", OperaDriver.class);
 		}
 	};
+	private static String getThreadName() {
+		return Thread.currentThread().getName() + "-" + Thread.currentThread().getId();
+	}
 	public static void add(String browser, Capabilities capabilities) throws Exception {
 		Class<?> driverClass = driverMap.get(browser);
-		driver = (WebDriver) driverClass.getConstructor(Capabilities.class).newInstance(capabilities);
+		WebDriver driver = (WebDriver) driverClass.getConstructor(Capabilities.class).newInstance(capabilities);
+		String threadName = getThreadName();
+		driverThreadMap.put(threadName, driver);
 	}
 	public static WebDriver current() {
-		return driver;
+		String threadName = getThreadName();
+		return driverThreadMap.get(threadName);
 	}
 }
