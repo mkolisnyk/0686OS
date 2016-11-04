@@ -6,21 +6,25 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.Select;
+
+import com.sample.framework.Configuration;
+import com.sample.framework.Driver;
 
 public class BookingSearchTest {
 	private WebDriver driver;
 	@Before
-	public void setUp() {
-		String baseUrl = "http://booking.com";
+	public void setUp() throws Exception {
+		Configuration.load();
+		Configuration.print();
+		String baseUrl = Configuration.get("url");
 		System.setProperty("webdriver.gecko.driver", new File("drivers/geckodriver").getAbsolutePath());
 		System.setProperty("webdriver.chrome.driver", new File("drivers/chromedriver").getAbsolutePath());
 		
 		DesiredCapabilities cap = new DesiredCapabilities();
-		driver = new ChromeDriver(cap);
+		Driver.add(Configuration.get("browser"), cap);
+		driver = Driver.current();
 		driver.get(baseUrl);
 	}
 	@After
