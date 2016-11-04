@@ -1,0 +1,50 @@
+package com.sample.tests;
+import java.io.File;
+
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.Select;
+
+public class BookingSearchTest {
+
+	@Test
+	public void testValidSearch() {
+		String baseUrl = "http://booking.com";
+		System.setProperty("webdriver.gecko.driver", new File("drivers/geckodriver").getAbsolutePath());
+		System.setProperty("webdriver.chrome.driver", new File("drivers/chromedriver").getAbsolutePath());
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		WebDriver driver = new ChromeDriver(cap);
+		driver.get(baseUrl);
+		driver.findElement(By.id("ss")).click();
+		driver.findElement(By.id("ss")).clear();
+		driver.findElement(By.id("ss")).sendKeys("london");
+		driver.findElement(
+				By.cssSelector("i.sb-date-field__chevron.bicon-downchevron"))
+				.click();
+		
+		driver.findElement(
+				By.xpath("//table[@class='c2-month-table']//td[contains(@class, 'c2-day-s-today')]"))
+				.click();
+		driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[2]"))
+				.click();
+		driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[2]"))
+				.click();
+		driver.findElement(By.xpath("(//input[@name='nflt'])[2]")).click();
+		driver.findElement(By.xpath("(//input[@name='nflt'])[2]")).click();
+		new Select(driver.findElement(By.id("group_adults")))
+				.selectByVisibleText("1");
+		new Select(driver.findElement(By.id("group_adults")))
+				.selectByVisibleText("1");
+		driver.findElement(
+				By.cssSelector("#group_adults > option[value=\"1\"]")).click();
+		driver.findElement(By.xpath("//button[@type='submit']"))
+				.click();
+		driver.findElement(By.id("ss")).click();
+		driver.close();
+	}
+
+}
