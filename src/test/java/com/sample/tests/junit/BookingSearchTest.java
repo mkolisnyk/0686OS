@@ -16,6 +16,9 @@ import org.openqa.selenium.support.ui.Select;
 
 import com.sample.framework.Configuration;
 import com.sample.framework.Driver;
+import com.sample.framework.ui.controls.Control;
+import com.sample.framework.ui.controls.Edit;
+import com.sample.framework.ui.controls.SelectList;
 
 @RunWith(Parameterized.class)
 public class BookingSearchTest {
@@ -60,31 +63,30 @@ public class BookingSearchTest {
 	
 	@Test
 	public void testValidSearch() {
-		driver.findElement(By.id("ss")).click();
-		driver.findElement(By.id("ss")).clear();
-		driver.findElement(By.id("ss")).sendKeys(this.destination);
-		driver.findElement(
-				By.cssSelector("i.sb-date-field__chevron.bicon-downchevron"))
-				.click();
-		
-		driver.findElement(
-				By.xpath("//table[@class='c2-month-table']//td[contains(@class, 'c2-day-s-today')]"))
-				.click();
+	    Edit editDestination = new Edit(driver, By.id("ss"));
+	    Control checkoutDayExpand = new Control(driver,
+	            By.cssSelector("i.sb-date-field__chevron.bicon-downchevron"));
+		Control checkoutDayToday = new Control(driver,
+		        By.xpath("//table[@class='c2-month-table']//td[contains(@class, 'c2-day-s-today')]"));
+	    Control radioLeisure = new Control(driver, By.xpath("(//input[@name='sb_travel_purpose'])[2]"));
+	    Control radioBusiness = new Control(driver, By.xpath("(//input[@name='sb_travel_purpose'])[1]"));
+	    Control radioHotels = new Control(driver, By.xpath("(//input[@name='nflt'])[2]"));
+	    SelectList  selectAdultsNumber = new SelectList(driver, By.id("group_adults"));
+	    Control buttonSubmit = new Control(driver, By.xpath("//button[@type='submit']"));
+        
+	    editDestination.setText(destination);
+	    checkoutDayExpand.click();
+	    checkoutDayToday.click();
+
 		if (this.isLeisure) {
-			driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[2]"))
-					.click();
+		    radioLeisure.click();
 		} else {
-			driver.findElement(By.xpath("(//input[@name='sb_travel_purpose'])[1]"))
-					.click();
+		    radioBusiness.click();
 		}
-		driver.findElement(By.xpath("(//input[@name='nflt'])[2]")).click();
-		new Select(driver.findElement(By.id("group_adults")))
-				.selectByVisibleText("" + this.numberOfAdults);
-		driver.findElement(
-				By.cssSelector("#group_adults > option[value=\"" + this.numberOfAdults + "\"]")).click();
-		driver.findElement(By.xpath("//button[@type='submit']"))
-				.click();
-		driver.findElement(By.id("ss")).click();
+		radioHotels.click();
+		selectAdultsNumber.selectByText("" + numberOfAdults);
+		buttonSubmit.click();
+		editDestination.click();
 	}
 
 }

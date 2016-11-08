@@ -12,6 +12,8 @@ import java.util.Enumeration;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+
 public final class Configuration {
 
 	private Configuration() {
@@ -48,5 +50,12 @@ public final class Configuration {
 		for (Entry<Object, Object> entry : properties.entrySet()) {
 			System.out.println(String.format("%s=%s", entry.getKey(), entry.getValue()));
 		}
+	}
+	public static long timeout() {
+	    String value = Configuration.get("timeout");
+	    if (value == null || value.trim().equals("")) {
+	        return 60L;
+	    }
+	    return Long.parseLong(value.trim());
 	}
 }
