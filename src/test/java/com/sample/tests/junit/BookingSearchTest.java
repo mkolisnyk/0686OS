@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import com.sample.framework.Configuration;
 import com.sample.framework.Driver;
+import com.sample.framework.ui.PageFactory;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
 import com.sample.framework.ui.controls.SelectList;
@@ -49,7 +50,7 @@ public class BookingSearchTest {
 		
 		DesiredCapabilities cap = new DesiredCapabilities();
 		Driver.add(Configuration.get("browser"), cap);
-		searchPage = new SearchPage(Driver.current());
+		searchPage = PageFactory.init(Driver.current(), SearchPage.class);
 		searchPage.navigate();
 	}
 	@After
@@ -66,14 +67,14 @@ public class BookingSearchTest {
     }
 	
 	@Test
-	public void testValidSearch() {
+	public void testValidSearch() throws Exception {
 	    searchPage.editDestination.setText(destination);
 	    searchPage.checkInToday();
 		searchPage.selectTravelFor(isLeisure);
 		searchPage.radioHotels.click();
 		searchPage.selectAdultsNumber.selectByText("" + numberOfAdults);
 		searchPage.buttonSubmit.click();
-		searchResultsPage = new SearchResultsPage(searchPage.getDriver());
+		searchResultsPage = PageFactory.init(Driver.current(), SearchResultsPage.class);
 		searchResultsPage.editDestination.click();
 		searchResultsPage.isTextPresent(destination);
 	}
