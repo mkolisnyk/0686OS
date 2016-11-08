@@ -77,6 +77,7 @@ public class BookingSearchTest {
 		searchResultsPage = PageFactory.init(Driver.current(), SearchResultsPage.class);
 		searchResultsPage.editDestination.click();
 		searchResultsPage.isTextPresent(destination);
+		searchResultsPage.captureScreenShot("./build/image01.png");
 	}
 
 }
