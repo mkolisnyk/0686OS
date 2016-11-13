@@ -50,7 +50,7 @@ public class BookingSearchTest {
 		
 		DesiredCapabilities cap = new DesiredCapabilities();
 		Driver.add(Configuration.get("browser"), cap);
-		searchPage = PageFactory.init(Driver.current(), SearchPage.class);
+		searchPage = PageFactory.init(SearchPage.class);
 		searchPage.navigate();
 	}
 	@After
@@ -74,7 +74,7 @@ public class BookingSearchTest {
 		searchPage.radioHotels.click();
 		searchPage.selectAdultsNumber.selectByText("" + numberOfAdults);
 		searchPage.buttonSubmit.click();
-		searchResultsPage = PageFactory.init(Driver.current(), SearchResultsPage.class);
+		searchResultsPage = PageFactory.init(SearchResultsPage.class);
 		searchResultsPage.editDestination.click();
 		searchResultsPage.isTextPresent(destination);
 		searchResultsPage.captureScreenShot("./build/image01.png");

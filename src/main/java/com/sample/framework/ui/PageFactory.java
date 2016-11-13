@@ -6,6 +6,8 @@ import java.lang.reflect.Field;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import com.sample.framework.Driver;
+
 public class PageFactory {
 
     public PageFactory() {
@@ -36,9 +38,9 @@ public class PageFactory {
         return result;
     }
 
-    public static <T extends Page> T init(WebDriver driver, Class<T> pageClass)
+    public static <T extends Page> T init(Class<T> pageClass)
             throws Exception {
-        T page = pageClass.getConstructor(WebDriver.class).newInstance(driver);
+        T page = pageClass.getConstructor(WebDriver.class).newInstance(Driver.current());
         for (Field field : pageClass.getFields()) {
             Annotation anno = field.getAnnotation(FindBy.class);
             if (anno != null) {
