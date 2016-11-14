@@ -1,6 +1,9 @@
 package com.sample.framework;
 
-import java.lang.reflect.InvocationTargetException;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
+
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,16 +26,25 @@ public final class Driver {
 		private static final long serialVersionUID = 1L;
 
 		{
-			put("chrome", ChromeDriver.class);
-			put("firefox", FirefoxDriver.class);
-			put("ie", InternetExplorerDriver.class);
-			put("safari", SafariDriver.class);
-			put("opera", OperaDriver.class);
+			put(Platform.CHROME.getValue(), ChromeDriver.class);
+			put(Platform.FIREFOX.getValue(), FirefoxDriver.class);
+			put(Platform.IE.getValue(), InternetExplorerDriver.class);
+			put(Platform.SAFARI.getValue(), SafariDriver.class);
+			put(Platform.OPERA.getValue(), OperaDriver.class);
+            put(Platform.ANRDOID_NATIVE.getValue(), AndroidDriver.class);
+            put(Platform.IOS_NATIVE.getValue(), IOSDriver.class);
 		}
 	};
 	private static String getThreadName() {
 		return Thread.currentThread().getName() + "-" + Thread.currentThread().getId();
 	}
+   public static void add(String url, String browser, Capabilities capabilities) throws Exception {
+        Class<?> driverClass = driverMap.get(browser);
+        WebDriver driver = (WebDriver) driverClass.getConstructor(URL.class, Capabilities.class)
+                .newInstance(new URL(url), capabilities);
+        String threadName = getThreadName();
+        driverThreadMap.put(threadName, driver);
+    }
 	public static void add(String browser, Capabilities capabilities) throws Exception {
 		Class<?> driverClass = driverMap.get(browser);
 		WebDriver driver = (WebDriver) driverClass.getConstructor(Capabilities.class).newInstance(capabilities);

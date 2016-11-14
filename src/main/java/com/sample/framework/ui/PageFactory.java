@@ -6,7 +6,9 @@ import java.lang.reflect.Field;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import com.sample.framework.Configuration;
 import com.sample.framework.Driver;
+import com.sample.framework.Platform;
 
 public class PageFactory {
 
@@ -38,20 +40,33 @@ public class PageFactory {
         return result;
     }
 
+    private static FindBy getLocatorForPlatform(FindBy locators[], Platform platform) {
+        for (FindBy locator : locators) {
+            if (locator.platform().equals(platform)) {
+                return locator;
+            }
+        }
+        return null;
+    }
     public static <T extends Page> T init(Class<T> pageClass)
             throws Exception {
         T page = pageClass.getConstructor(WebDriver.class).newInstance(Driver.current());
         for (Field field : pageClass.getFields()) {
-            Annotation anno = field.getAnnotation(FindBy.class);
-            if (anno != null) {
-                Object control = field
-                        .getType()
-                        .getConstructor(Page.class, By.class)
-                        .newInstance(
-                                page,
-                                toLocator(getAnnotationField(anno, "locator",
-                                        String.class)));
-                field.set(page, control);
+            FindBy locators[] = field.getAnnotationsByType(FindBy.class);
+            if (locators != null && locators.length > 0) {
+                FindBy anno = getLocatorForPlatform(locators, Configuration.platform());
+                if (anno == null) {
+                    anno = getLocatorForPlatform(locators, Platform.ANY);
+                }
+                if (anno != null) {
+                    Object control = field
+                            .getType()
+                            .getConstructor(Page.class, By.class)
+                            .newInstance(
+                                    page,
+                                    toLocator(anno.locator()));
+                    field.set(page, control);
+                }
             }
         }
         return page;
