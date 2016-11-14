@@ -32,16 +32,18 @@ public class Page {
         Control element = new Control(this, By.xpath(locator));
         return element.exists();
     }
-    public byte[] captureScreenShot() throws IOException {
-        WebDriver augmentedDriver = new Augmenter().augment(Driver.current());
-        byte[] data = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.BYTES);
-        return data;
+    public byte[] captureScreenShot() {
+    	WebDriver augmentedDriver = new Augmenter().augment(getDriver());
+    	byte[] data = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.BYTES);
+    	return data;
     }
+
     public File captureScreenShot(String destination) throws IOException {
-        WebDriver augmentedDriver = new Augmenter().augment(Driver.current());
-        File srcFile = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
-        File output = new File(destination);
-        FileUtils.copyFile(srcFile, output);
-        return output;
+    	WebDriver augmentedDriver = new Augmenter().augment(getDriver());
+    	File srcFile = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
+    	File output = new File(destination);
+    	FileUtils.copyFile(srcFile, output);
+    	return output;
     }
+
 }
