@@ -14,40 +14,12 @@ import com.sample.framework.Driver;
 import com.sample.framework.ui.PageFactory;
 import com.sample.tests.pages.SearchPage;
 
-public class SearchPageUITest {
+public class SearchPageUITest extends TestCommon {
 
     public SearchPageUITest() {
         // TODO Auto-generated constructor stub
     }
-    private SearchPage searchPage;
-    
-    @Before
-    public void setUp() throws Exception {
-        Configuration.load();
-        Configuration.print();
-        
-        System.setProperty("webdriver.gecko.driver", new File("drivers/geckodriver").getAbsolutePath());
-        System.setProperty("webdriver.chrome.driver", new File("drivers/chromedriver").getAbsolutePath());
-        
-        DesiredCapabilities cap = new DesiredCapabilities();
-        cap.setCapability(CapabilityType.BROWSER_NAME, "");
-        cap.setCapability("platformVersion", "5.0");
-        cap.setCapability("platformName", "Android");
-        cap.setCapability("app", "/Users/mykolak/base.apk");
-        cap.setCapability("deviceName", "Any");
-        cap.setCapability("commandTimeout", "60");
-        if (Configuration.platform().isWeb()) {
-            Driver.add(Configuration.get("browser"), cap);
-        } else {
-            Driver.add(Configuration.get("driver_url"), Configuration.get("browser"), cap);
-        }
-        searchPage = PageFactory.init(SearchPage.class);
-        searchPage.navigate();
-    }
-    @After
-    public void tearDown() {
-        Driver.current().quit();
-    }
+
 
     @Test
     public void testVerifyUIOnSearchPage() {
