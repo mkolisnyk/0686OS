@@ -9,18 +9,20 @@ import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
 import com.sample.framework.ui.controls.SelectList;
+import com.sample.tests.controls.LocationLookupEdit;
 
 public class SearchPage extends Page {
 
     @FindBy(locator = "search_searchInput", platform = Platform.ANRDOID_NATIVE)
     @FindBy(locator = "ss")
-    public Edit editDestination;
+    public LocationLookupEdit editDestination;
     
     @FindBy(locator = "checkincell", platform = Platform.ANRDOID_NATIVE)
     @FindBy(locator = "css=i.sb-date-field__chevron.bicon-downchevron")
     public Control checkoutDayExpand;
     
-    @FindBy(locator = "", platform = Platform.ANRDOID_NATIVE)
+    @FindBy(locator = "xpath=(//android.widget.TextView[contains(@resource-id, 'calendar_tv') and @enabled='true'])[1]",
+                platform = Platform.ANRDOID_NATIVE)
     @FindBy(locator = "//table[@class='c2-month-table']//td[contains(@class, 'c2-day-s-today')]")
     public Control checkoutDayToday;
     

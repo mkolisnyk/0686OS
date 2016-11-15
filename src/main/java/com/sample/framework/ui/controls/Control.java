@@ -19,6 +19,11 @@ public class Control {
         this.parent = parentValue;
         this.locator = locatorValue;
     }
+    
+    public Page getParent() {
+        return parent;
+    }
+
     public WebDriver getDriver() {
         return parent.getDriver();
     }
@@ -37,10 +42,25 @@ public class Control {
     public boolean exists() {
         return exists(TIMEOUT);
     }
+    public boolean visible(long timeout) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        } catch (TimeoutException e) {
+            return false;
+        }
+        return true;
+    }
+    public boolean visible() {
+        Assert.assertTrue(
+                "Unable to find element: " + this.locator.toString(),
+                exists());
+        return visible(TIMEOUT);
+    }
     public void click() {
         Assert.assertTrue(
-            "Unable to find element: " + this.locator.toString(),
-            exists());
+            "Element is still invisible: " + this.locator.toString(),
+            visible());
         this.element().click();
     }
 }

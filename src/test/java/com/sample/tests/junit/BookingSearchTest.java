@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.sample.framework.Configuration;
 import com.sample.framework.ui.PageFactory;
 import com.sample.tests.pages.SearchResultsPage;
 
@@ -37,13 +38,15 @@ public class BookingSearchTest extends TestCommon {
 	@Test
 	public void testValidSearch() throws Exception {
 	    searchPage.editDestination.setText(destination);
-	    searchPage.checkInToday();
+	    searchPage.checkoutDayToday.click();
 		searchPage.selectTravelFor(isLeisure);
-		searchPage.radioHotels.click();
-		searchPage.selectAdultsNumber.selectByText("" + numberOfAdults);
+		if (Configuration.platform().isWeb()) {
+		    searchPage.radioHotels.click();
+		}
+		//searchPage.selectAdultsNumber.selectByText("" + numberOfAdults);
 		searchPage.buttonSubmit.click();
 		searchResultsPage = PageFactory.init(SearchResultsPage.class);
-		searchResultsPage.editDestination.click();
+		//searchResultsPage.editDestination.click();
 		searchResultsPage.isTextPresent(destination);
 		searchResultsPage.captureScreenShot("./build/image01.png");
 	}
