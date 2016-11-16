@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -53,9 +54,15 @@ public class BankingTest {
         home = PageFactory.init(HomePage.class);
         home.buttonBankManagerLogin.click();
         bankManagerMenu = PageFactory.init(BankManagerCommonPage.class);
-        bankManagerMenu.buttonAddCustomer.click();
+        bankManagerMenu.buttonCustomers.click();
+        
+        customers = PageFactory.init(CustomersPage.class);
+        Assert.assertTrue(customers.tableCustomers.isNotEmpty());
+        int rows = customers.tableCustomers.getItemsCount();
+        customers.buttonAddCustomer.click();
         
         addCustomer = PageFactory.init(AddCustomerPage.class);
+        Thread.sleep(1000);
         addCustomer.editFirstName.setText("Test");
         addCustomer.editLastName.setText("User");
         addCustomer.editPostCode.setText("WWW99");
@@ -64,5 +71,13 @@ public class BankingTest {
         addCustomer.buttonCustomers.click();
 
         customers = PageFactory.init(CustomersPage.class);
+        Assert.assertEquals(rows + 1, customers.tableCustomers.getItemsCount());
+        Assert.assertEquals("Test", customers.tableCustomers.getSubItem("First Name", rows).getText());
+        Assert.assertEquals("User", customers.tableCustomers.getSubItem("Last Name", rows).getText());
+        Assert.assertEquals("WWW99", customers.tableCustomers.getSubItem("Post Code", rows).getText());
+        
+        customers.tableCustomers.getSubItem("Delete Customer", rows).click();
+        Assert.assertTrue(customers.tableCustomers.isNotEmpty());
+        Assert.assertEquals(rows, customers.tableCustomers.getItemsCount());
     }
 }

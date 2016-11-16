@@ -3,12 +3,14 @@ package com.sample.framework.ui;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.sample.framework.Configuration;
 import com.sample.framework.Driver;
 import com.sample.framework.Platform;
+import com.sample.framework.ui.controls.Control;
 
 public class PageFactory {
 
@@ -32,14 +34,6 @@ public class PageFactory {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T> T getAnnotationField(Annotation annotation, String name,
-            Class<T> type) throws Exception {
-        T result;
-        result = (T) annotation.getClass().getMethod(name).invoke(annotation);
-        return result;
-    }
-
     private static FindBy getLocatorForPlatform(FindBy locators[], Platform platform) {
         for (FindBy locator : locators) {
             if (locator.platform().equals(platform)) {
@@ -47,6 +41,16 @@ public class PageFactory {
             }
         }
         return null;
+    }
+
+    private static SubItem[] getSubItemsForPlatform(SubItem items[], Platform platform) {
+        SubItem[] result = new SubItem[]{};
+        for (SubItem item : items) {
+            if (item.platform().equals(platform) || item.platform().equals(Platform.ANY)) {
+                result = ArrayUtils.add(result, item);
+            }
+        }
+        return result;
     }
     public static <T extends Page> T init(Class<T> pageClass)
             throws Exception {
@@ -59,12 +63,15 @@ public class PageFactory {
                     anno = getLocatorForPlatform(locators, Platform.ANY);
                 }
                 if (anno != null) {
-                    Object control = field
+                    Control control = (Control) field
                             .getType()
                             .getConstructor(Page.class, By.class)
                             .newInstance(
                                     page,
                                     toLocator(anno.locator()));
+                    control.setItemLocatorText(anno.itemLocator());
+                    SubItem[] items = field.getAnnotationsByType(SubItem.class);
+                    control.addSubItems(getSubItemsForPlatform(items, Configuration.platform()));
                     field.set(page, control);
                 }
             }
