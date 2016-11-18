@@ -14,6 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.sample.framework.Configuration;
 import com.sample.framework.Driver;
 import com.sample.framework.ui.PageFactory;
+import com.sample.framework.ui.controls.Control;
 import com.sample.tests.pages.banking.AddCustomerPage;
 import com.sample.tests.pages.banking.BankManagerCommonPage;
 import com.sample.tests.pages.banking.CustomersPage;
@@ -59,6 +60,18 @@ public class BankingTest {
         int rows = customers.tableCustomers.getItemsCount();
         
         addCustomer = customers.buttonAddCustomer.clickAndWaitFor(AddCustomerPage.class);
+        Assert.assertTrue(addCustomer.allElementsExist(new Control[] {
+            addCustomer.editFirstName,
+            addCustomer.editLastName,
+            addCustomer.editPostCode,
+            addCustomer.buttonSubmit
+        }));
+        Assert.assertTrue(addCustomer.anyOfElementsExist(new Control[] {
+                addCustomer.editFirstName,
+                addCustomer.editLastName,
+                addCustomer.editPostCode,
+                addCustomer.buttonSubmit
+            }));
         Thread.sleep(1000);
         addCustomer.editFirstName.setText("Test");
         addCustomer.editLastName.setText("User");
