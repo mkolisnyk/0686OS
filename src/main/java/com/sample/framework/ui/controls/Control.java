@@ -7,11 +7,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sample.framework.Configuration;
-import com.sample.framework.Driver;
 import com.sample.framework.ui.Page;
 import com.sample.framework.ui.PageFactory;
 import com.sample.framework.ui.SubItem;
@@ -72,32 +72,56 @@ public class Control {
     public WebElement element() {
         return getDriver().findElement(locator);
     }
-    public boolean exists(long timeout) {
+    public boolean waitUntil(ExpectedCondition<?> condition, long timeout) {
         WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
         try {
-            wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            wait.until(condition);
         } catch (TimeoutException e) {
             return false;
         }
         return true;
+    }
+    public boolean exists(long timeout) {
+        return waitUntil(ExpectedConditions.presenceOfElementLocated(locator), timeout);
     }
     public boolean exists() {
         return exists(TIMEOUT);
     }
+    public boolean disappears(long timeout) {
+        return waitUntil(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(locator)), timeout);
+    }
+    public boolean disappears() {
+        return disappears(TIMEOUT);
+    }
     public boolean visible(long timeout) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        } catch (TimeoutException e) {
-            return false;
-        }
-        return true;
+        return waitUntil(ExpectedConditions.visibilityOfElementLocated(locator), timeout);
     }
     public boolean visible() {
         Assert.assertTrue(
                 "Unable to find element: " + this.locator.toString(),
                 exists());
         return visible(TIMEOUT);
+    }
+    public boolean invisible(long timeout) {
+        return waitUntil(ExpectedConditions.invisibilityOfElementLocated(locator), timeout);
+    }
+    public boolean invisible() {
+        Assert.assertTrue(
+                "Unable to find element: " + this.locator.toString(),
+                exists());
+        return invisible(TIMEOUT);
+    }
+    public boolean enabled(long timeout) {
+        return waitUntil(ExpectedConditions.elementToBeClickable(locator), timeout);
+    }
+    public boolean enabled() {
+        return enabled(TIMEOUT);
+    }
+    public boolean disabled(long timeout) {
+        return waitUntil(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(locator)), timeout);
+    }
+    public boolean disabled() {
+        return enabled(TIMEOUT);
     }
     public void click() {
         Assert.assertTrue(
