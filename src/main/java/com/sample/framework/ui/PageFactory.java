@@ -72,6 +72,7 @@ public class PageFactory {
                     control.setItemLocatorText(anno.itemLocator());
                     SubItem[] items = field.getAnnotationsByType(SubItem.class);
                     control.addSubItems(getSubItemsForPlatform(items, Configuration.platform()));
+                    control.setExcludeFromSearch(anno.excludeFromSearch());
                     field.set(page, control);
                 }
             }

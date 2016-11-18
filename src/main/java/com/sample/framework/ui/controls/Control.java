@@ -11,7 +11,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.sample.framework.Configuration;
+import com.sample.framework.Driver;
 import com.sample.framework.ui.Page;
+import com.sample.framework.ui.PageFactory;
 import com.sample.framework.ui.SubItem;
 
 public class Control {
@@ -21,6 +23,7 @@ public class Control {
     private String locatorText = "";
     private String itemLocatorText = "";
     private HashMap<String, SubItem> subItemsMap;
+    private boolean excludeFromSearch = false;
     
     public Control(Page parentValue, By locatorValue) {
         this.parent = parentValue;
@@ -53,6 +56,14 @@ public class Control {
     
     public HashMap<String, SubItem> getSubItemsMap() {
         return subItemsMap;
+    }
+
+    public boolean isExcludeFromSearch() {
+        return excludeFromSearch;
+    }
+
+    public void setExcludeFromSearch(boolean excludeFromSearch) {
+        this.excludeFromSearch = excludeFromSearch;
     }
 
     public WebDriver getDriver() {
@@ -93,6 +104,13 @@ public class Control {
             "Element is still invisible: " + this.locator.toString(),
             visible());
         this.element().click();
+    }
+    public <T extends Page> T clickAndWaitFor(Class<T> pageClass) throws Exception {
+        this.click();
+        T page = PageFactory.init(pageClass);
+        Assert.assertTrue(String.format("The page of %s class didn't appear during specified timeout", pageClass.getName()),
+                page.isCurrent());
+        return page;
     }
     public String getText() {
         return this.element().getText();

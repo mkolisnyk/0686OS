@@ -15,4 +15,5 @@ public @interface FindBy {
     String locator();
     Platform platform() default Platform.ANY;
     String itemLocator() default "";
+    boolean excludeFromSearch() default false;
 }

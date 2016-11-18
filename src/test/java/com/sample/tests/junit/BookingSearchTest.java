@@ -44,8 +44,7 @@ public class BookingSearchTest extends TestCommon {
 		    searchPage.radioHotels.click();
 		}
 		//searchPage.selectAdultsNumber.selectByText("" + numberOfAdults);
-		searchPage.buttonSubmit.click();
-		searchResultsPage = PageFactory.init(SearchResultsPage.class);
+		searchResultsPage = searchPage.buttonSubmit.clickAndWaitFor(SearchResultsPage.class);
 		//searchResultsPage.editDestination.click();
 		searchResultsPage.isTextPresent(destination);
 		searchResultsPage.captureScreenShot("./build/image01.png");

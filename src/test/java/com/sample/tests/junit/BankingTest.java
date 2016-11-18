@@ -52,25 +52,21 @@ public class BankingTest {
     @Test
     public void testAddNewCustomer() throws Exception {
         home = PageFactory.init(HomePage.class);
-        home.buttonBankManagerLogin.click();
-        bankManagerMenu = PageFactory.init(BankManagerCommonPage.class);
-        bankManagerMenu.buttonCustomers.click();
+        bankManagerMenu = home.buttonBankManagerLogin.clickAndWaitFor(BankManagerCommonPage.class);
         
-        customers = PageFactory.init(CustomersPage.class);
+        customers = bankManagerMenu.buttonCustomers.clickAndWaitFor(CustomersPage.class);
         Assert.assertTrue(customers.tableCustomers.isNotEmpty());
         int rows = customers.tableCustomers.getItemsCount();
-        customers.buttonAddCustomer.click();
         
-        addCustomer = PageFactory.init(AddCustomerPage.class);
+        addCustomer = customers.buttonAddCustomer.clickAndWaitFor(AddCustomerPage.class);
         Thread.sleep(1000);
         addCustomer.editFirstName.setText("Test");
         addCustomer.editLastName.setText("User");
         addCustomer.editPostCode.setText("WWW99");
         addCustomer.buttonSubmit.click();
         addCustomer.getDriver().switchTo().alert().accept();
-        addCustomer.buttonCustomers.click();
 
-        customers = PageFactory.init(CustomersPage.class);
+        customers = addCustomer.buttonCustomers.clickAndWaitFor(CustomersPage.class);
         Assert.assertEquals(rows + 1, customers.tableCustomers.getItemsCount());
         Assert.assertEquals("Test", customers.tableCustomers.getSubItem("First Name", rows).getText());
         Assert.assertEquals("User", customers.tableCustomers.getSubItem("Last Name", rows).getText());

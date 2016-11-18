@@ -2,6 +2,7 @@ package com.sample.framework.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -10,11 +11,12 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
 
-import com.sample.framework.Driver;
+import com.sample.framework.Configuration;
 import com.sample.framework.ui.controls.Control;
 
 public class Page {
-
+    protected static final long TIMEOUT = Configuration.timeout();
+    
     private WebDriver driver;
 
     public Page(WebDriver driverValue) {
@@ -46,4 +48,19 @@ public class Page {
     	return output;
     }
 
+    public boolean isCurrent(long timeout) throws Exception {
+        Field[] fields = this.getClass().getFields();
+        for (Field field : fields) {
+            if (Control.class.isAssignableFrom(field.getType())) {
+                Control control = (Control) field.get(this);
+                if (!control.isExcludeFromSearch() && !control.exists(timeout)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean isCurrent() throws Exception {
+        return isCurrent(TIMEOUT);
+    }
 }
