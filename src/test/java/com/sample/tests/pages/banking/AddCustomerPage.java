@@ -3,6 +3,7 @@ package com.sample.tests.pages.banking;
 import org.openqa.selenium.WebDriver;
 
 import com.sample.framework.ui.FindBy;
+import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
 
@@ -22,4 +23,9 @@ public class AddCustomerPage extends BankManagerCommonPage {
     
     @FindBy(locator = "//button[text() = 'Add Customer']")
     public Control buttonSubmit;
+    
+    @Override
+    public Page navigate() throws Exception {
+        return this.buttonAddCustomer.clickAndWaitFor(this.getClass());
+    }
 }

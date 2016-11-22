@@ -27,7 +27,7 @@ public class Page {
     public WebDriver getDriver() {
         return driver;
     }
-    public Page navigate() {
+    public Page navigate() throws Exception {
         return this;
     }
     public boolean isTextPresent(String text) {
