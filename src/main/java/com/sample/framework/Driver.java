@@ -35,7 +35,7 @@ public final class Driver {
             put(Platform.IOS_NATIVE.getValue(), IOSDriver.class);
 		}
 	};
-	private static String getThreadName() {
+	public static String getThreadName() {
 		return Thread.currentThread().getName() + "-" + Thread.currentThread().getId();
 	}
    public static void add(String url, String browser, Capabilities capabilities) throws Exception {

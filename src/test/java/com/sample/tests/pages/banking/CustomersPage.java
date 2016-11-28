@@ -2,17 +2,20 @@ package com.sample.tests.pages.banking;
 
 import org.openqa.selenium.WebDriver;
 
+import com.sample.framework.kdt.Alias;
 import com.sample.framework.ui.FindBy;
 import com.sample.framework.ui.Page;
 import com.sample.framework.ui.SubItem;
 import com.sample.framework.ui.controls.TableView;
 
+@Alias("Customers")
 public class CustomersPage extends BankManagerCommonPage {
 
     public CustomersPage(WebDriver driverValue) {
         super(driverValue);
     }
 
+    @Alias("Customer List")
     @FindBy(locator = "//table", itemLocator = "/tbody/tr")
     @SubItem(name = "First Name", locator = "/td[1]")
     @SubItem(name = "Last Name", locator = "/td[2]")
