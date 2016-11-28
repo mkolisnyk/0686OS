@@ -16,4 +16,9 @@ public class Edit extends Control {
         this.element().clear();
         this.element().sendKeys(value);
     }
+
+    @Override
+    public String getText() {
+        return this.element().getAttribute("value");
+    }
 }
