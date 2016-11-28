@@ -64,5 +64,12 @@ public class BasicKDTSteps {
             ),
             text.equals(actualText) || actualText.contains(text));
     }
-
+    @When("^(?:I |)accept the alert message$")
+    public void acceptAlert() {
+        Driver.current().switchTo().alert().accept();
+    }
+    @Then("^(?:I should see |)the \"(.*)\" text is shown$")
+    public void verifyFieldText(String text) throws Exception {
+        Assert.assertTrue("Unable to find text: '" + text + "'", Page.getCurrent().isTextPresent(text));
+    }
 }

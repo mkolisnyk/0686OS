@@ -18,5 +18,12 @@ Feature: Bank Manager
     Then I should see the "First Name" field contains the "Test" text
     And the "Last Name" field contains the "User" text
     And the "Post Code" field contains the "WWW99" text
+    When I click on the "Submit" button
+    And accept the alert message
+    Then I should see the "Add Customer" page
     When I go to the "Customers" page
     Then I should see the "Customers" page
+    And the "Test" text is shown
+    And the "User" text is shown
+    And the "WWW99" text is shown
+    
