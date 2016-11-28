@@ -34,6 +34,8 @@ dependencies {
    	compile 'org.apache.httpcomponents:httpclient:4.5.2'
    	compile 'org.testng:testng:6.9.13.6'
    	compile 'io.appium:java-client:3.2.0'
+   	compile group: 'info.cukes', name: 'cucumber-picocontainer', version: '1.2.5'
+    compile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
 }
 
 buildscript {
