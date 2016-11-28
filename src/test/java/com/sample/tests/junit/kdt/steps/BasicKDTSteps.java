@@ -1,5 +1,8 @@
 package com.sample.tests.junit.kdt.steps;
 
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 
 import com.sample.framework.Driver;
@@ -7,6 +10,7 @@ import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -48,7 +52,7 @@ public class BasicKDTSteps {
         return control;
     }
     @When("^(?:I |)enter \"(.*)\" text into the \"(.*)\" field$")
-    public void enterText(String text, String fieldName) throws Exception {
+    public void enterValue(String text, String fieldName) throws Exception {
         Edit control = (Edit) verifyElementExists(fieldName);
         control.setText(text);
     }
@@ -69,7 +73,35 @@ public class BasicKDTSteps {
         Driver.current().switchTo().alert().accept();
     }
     @Then("^(?:I should see |)the \"(.*)\" text is shown$")
-    public void verifyFieldText(String text) throws Exception {
+    public void verifyTextPresent(String text) throws Exception {
         Assert.assertTrue("Unable to find text: '" + text + "'", Page.getCurrent().isTextPresent(text));
+    }
+    @Then("^(?:I should see |)the following fields are shown:$")
+    public void verifyMultipleFieldsAvailability(List<String> elements) throws Exception {
+        for (String element : elements) {
+            verifyElementExists(element);
+        }
+    }
+    @Then("^(?:I should see |)the following labels are shown:$")
+    public void verifyMultipleLabelsAvailability(List<String> elements) throws Exception {
+        for (String element : elements) {
+            verifyTextPresent(element);
+        }
+    }
+    @When("^(?:I |)populate current page with the following data:$")
+    public void populatePageWithData(DataTable data) throws Throwable {
+        List<Map<String, String>> content = data.asMaps(String.class,
+                String.class);
+        for (Map<String, String> row : content) {
+            enterValue(row.get("Value"), row.get("Field"));
+        }
+    }
+    @Then("^(?:I should see |)the page contains the following data:$")
+    public void pageContainsData(DataTable data) throws Throwable {
+        List<Map<String, String>> content = data.asMaps(String.class,
+                String.class);
+        for (Map<String, String> row : content) {
+            verifyFieldText(row.get("Field"), row.get("Value"));
+        }
     }
 }
