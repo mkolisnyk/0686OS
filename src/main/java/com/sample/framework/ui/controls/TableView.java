@@ -23,6 +23,12 @@ public class TableView extends Control {
         String locator = String.format("(%s)[%d]", this.getFullItemLocator(), index + 1);
         return new Control(this.getParent(), By.xpath(locator));
     }
+    public boolean isEmpty(long timeout) {
+        return this.getItem(0).disappears(timeout);
+    }
+    public boolean isEmpty() {
+        return isEmpty(TIMEOUT);
+    }
     public boolean isNotEmpty(long timeout) {
         return this.getItem(0).exists();
     }

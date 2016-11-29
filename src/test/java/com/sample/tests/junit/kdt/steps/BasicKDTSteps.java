@@ -2,6 +2,7 @@ package com.sample.tests.junit.kdt.steps;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Assert;
 
@@ -9,6 +10,7 @@ import com.sample.framework.Driver;
 import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
+import com.sample.framework.ui.controls.TableView;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -103,5 +105,42 @@ public class BasicKDTSteps {
         for (Map<String, String> row : content) {
             verifyFieldText(row.get("Field"), row.get("Value"));
         }
+    }
+    @Then("^(?:I should see |)the \"(.*)\" (?:list|table) is (|not )empty$")
+    public void verifyListEmptyState(String list, String emptyState) throws Throwable {
+        boolean empty = emptyState.trim().equals("");
+        TableView control = (TableView) verifyElementExists(list);
+        if (empty) {
+            Assert.assertTrue("The '"+ list + "' element is not empty", control.isEmpty());
+        } else {
+            Assert.assertTrue("The '"+ list + "' element is empty", control.isNotEmpty());
+        }
+    }
+    @Then("^(?:I should see |)the (first|last) (?:row|item) of the \"(.*)\" (?:list|table) contains the following data:$")
+    public void verifyListRowData(String firstLast, String list, DataTable data) throws Throwable {
+        int index = 0;
+        TableView control = (TableView) verifyElementExists(list);
+        if (firstLast.equals("last")) {
+            index = control.getItemsCount() - 1;
+        }
+        List<Map<String, String>> content = data.asMaps(String.class,
+                String.class);
+        for (Map<String, String> row : content) {
+            for (Entry<String, String> entry : row.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                Assert.assertEquals(String.format("The %s row element '%s' has unexpected value", firstLast, key),
+                        value, control.getSubItem(key, index).getText());
+            }
+        }
+    }
+    @When("^(?:I |)(?:click|tap) on the (first|last) \"(.*)\" element of the \"(.*)\" (?:list|table)$")
+    public void clickOnSubItem(String firstLast, String item, String list) throws Exception {
+        int index = 0;
+        TableView control = (TableView) verifyElementExists(list);
+        if (firstLast.equals("last")) {
+            index = control.getItemsCount() - 1;
+        }
+        control.getSubItem(item, index).click();
     }
 }
