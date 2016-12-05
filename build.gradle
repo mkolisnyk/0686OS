@@ -37,6 +37,7 @@ dependencies {
    	compile group: 'info.cukes', name: 'cucumber-picocontainer', version: '1.2.5'
     compile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.9-RC1'
+    compile group: 'com.udojava', name: 'EvalEx', version: '1.0'
 }
 
 buildscript {

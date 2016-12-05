@@ -1,5 +1,6 @@
 package com.sample.tests.junit.kdt.steps;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,6 +13,7 @@ import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
 import com.sample.framework.ui.controls.TableView;
+import com.udojava.evalex.Expression;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -152,12 +154,13 @@ public class BasicKDTSteps {
     @Then("^(?:I should see |)the \"(.*)\" (?:table|list) has \"(.*)\" (?:items|rows)$")
     public void verifyTableRowCount(String list, String countValue) throws Exception {
         TableView control = (TableView) verifyElementExists(list);
-        int actualCount = control.getItemsCount();
+        BigDecimal actualCount = new BigDecimal(control.getItemsCount());
         String expectedCountValue = countValue;
         for (String key : Context.variables()) {
             expectedCountValue = expectedCountValue.replaceAll(key, Context.get(key).toString());
         }
-        int expectedCount = Integer.parseInt(expectedCountValue);
+        Expression expression = new Expression(expectedCountValue);
+        BigDecimal expectedCount = expression.setPrecision(0).eval();
         Assert.assertEquals("Unexpected row count for the '" + list + "' table", expectedCount, actualCount);
     }
 }

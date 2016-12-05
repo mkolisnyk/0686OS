@@ -31,6 +31,8 @@ Feature: Bank Manager
     Then I should see the "Add Customer" page
     When I go to the "Customers" page
     Then I should see the "Customers" page
+    And the "Customer List" table has "Initial Count + 1" rows
+    And the "Customer List" table has "100 * (Initial Count + 1) / 100" rows
     And the last row of the "Customer List" table contains the following data:
       | First Name | Last Name | Post Code |
       | Test       | User      | WWW99     |
