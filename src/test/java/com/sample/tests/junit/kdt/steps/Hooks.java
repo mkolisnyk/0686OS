@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.sample.framework.Configuration;
+import com.sample.framework.Context;
 import com.sample.framework.Driver;
 
 import cucumber.api.Scenario;
@@ -16,6 +17,7 @@ public class Hooks {
 
     @Before
     public void beforeScenario(Scenario scenario) throws Exception {
+        Context.clearCurrent();
         Configuration.load();
         Configuration.print();
         

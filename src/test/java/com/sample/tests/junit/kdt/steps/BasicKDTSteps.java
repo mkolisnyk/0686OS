@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.junit.Assert;
 
+import com.sample.framework.Context;
 import com.sample.framework.Driver;
 import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
@@ -142,5 +143,21 @@ public class BasicKDTSteps {
             index = control.getItemsCount() - 1;
         }
         control.getSubItem(item, index).click();
+    }
+    @When("^(?:I |)note the \"(.*)\" (?:table|list) (?:row|item) count as \"(.*)\"")
+    public void noteRowCountAs(String list, String varName) throws Exception {
+        TableView control = (TableView) verifyElementExists(list);
+        Context.put(varName, control.getItemsCount());
+    }
+    @Then("^(?:I should see |)the \"(.*)\" (?:table|list) has \"(.*)\" (?:items|rows)$")
+    public void verifyTableRowCount(String list, String countValue) throws Exception {
+        TableView control = (TableView) verifyElementExists(list);
+        int actualCount = control.getItemsCount();
+        String expectedCountValue = countValue;
+        for (String key : Context.variables()) {
+            expectedCountValue = expectedCountValue.replaceAll(key, Context.get(key).toString());
+        }
+        int expectedCount = Integer.parseInt(expectedCountValue);
+        Assert.assertEquals("Unexpected row count for the '" + list + "' table", expectedCount, actualCount);
     }
 }
