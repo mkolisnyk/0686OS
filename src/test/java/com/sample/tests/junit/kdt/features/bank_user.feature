@@ -9,4 +9,8 @@ Feature: Bank user
     And enter "100" text into the "Deposit Amount" field
     And click on the "Submit Deposit" button
     When I should see the "Deposit Successful" label is shown
+    And the "Balance" field value is calculated using the following formula:
+    	"""
+    	Initial Balance + 100
+    	"""
     

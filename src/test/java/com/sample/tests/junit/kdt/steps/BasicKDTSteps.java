@@ -1,6 +1,7 @@
 package com.sample.tests.junit.kdt.steps;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -172,5 +173,21 @@ public class BasicKDTSteps {
     @Given("^I am logged as the \"(.*)\" customer$")
     public void loginAsCustomer(String name) throws Exception {
         ((HomePage) Page.screen("Banking Home")).loginAsCustomer(name);
+    }
+    @Then("^(?:I should see |)the \"(.*?)\" field value is calculated using the following formula:$")
+    public void fieldValueIsCalculatedByFormula(
+            String field, String formula) throws Throwable {
+        final double precision = 0.0099;
+        double pageVal = Double.parseDouble(Page.getCurrent().onPage(field)
+                .getText());
+        for (String key : Context.variables()) {
+            formula = formula.replaceAll(key, Context.get(key).toString());
+        }
+        Expression expression = new Expression(formula);
+        double calcVal = expression
+            .setRoundingMode(RoundingMode.HALF_EVEN).setPrecision(6).eval().doubleValue();
+
+        Assert.assertEquals("Wrong " + field + "! on page (" + pageVal
+                + ") vs calulated (" + calcVal + ")", pageVal, calcVal, precision);
     }
 }
