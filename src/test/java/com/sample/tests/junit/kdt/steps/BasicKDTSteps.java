@@ -13,6 +13,7 @@ import com.sample.framework.ui.Page;
 import com.sample.framework.ui.controls.Control;
 import com.sample.framework.ui.controls.Edit;
 import com.sample.framework.ui.controls.TableView;
+import com.sample.tests.pages.banking.HomePage;
 import com.udojava.evalex.Expression;
 
 import cucumber.api.DataTable;
@@ -151,6 +152,11 @@ public class BasicKDTSteps {
         TableView control = (TableView) verifyElementExists(list);
         Context.put(varName, control.getItemsCount());
     }
+    @When("^(?:I |)note the \"(.*)\" field text as \"(.*)\"")
+    public void noteControlTextAs(String list, String varName) throws Exception {
+        Control control = verifyElementExists(list);
+        Context.put(varName, control.getText());
+    }
     @Then("^(?:I should see |)the \"(.*)\" (?:table|list) has \"(.*)\" (?:items|rows)$")
     public void verifyTableRowCount(String list, String countValue) throws Exception {
         TableView control = (TableView) verifyElementExists(list);
@@ -162,5 +168,9 @@ public class BasicKDTSteps {
         Expression expression = new Expression(expectedCountValue);
         BigDecimal expectedCount = expression.setPrecision(0).eval();
         Assert.assertEquals("Unexpected row count for the '" + list + "' table", expectedCount, actualCount);
+    }
+    @Given("^I am logged as the \"(.*)\" customer$")
+    public void loginAsCustomer(String name) throws Exception {
+        ((HomePage) Page.screen("Banking Home")).loginAsCustomer(name);
     }
 }

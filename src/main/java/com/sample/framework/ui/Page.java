@@ -91,6 +91,7 @@ public class Page {
         for (Field field : fields) {
             if (Control.class.isAssignableFrom(field.getType())) {
                 Control control = (Control) field.get(this);
+                System.out.println(String.format("Checking %s : '%s'", field.getName(), control.getLocatorText()));
                 if (!control.isExcludeFromSearch() && !control.exists(timeout)) {
                     return false;
                 }

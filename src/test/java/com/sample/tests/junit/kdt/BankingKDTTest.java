@@ -14,7 +14,8 @@ import cucumber.api.junit.Cucumber;
                 "usage:build/cucumber-usage.json"
                 },
         features = { "src/test/java/com/sample/tests/junit/kdt/features" },
-        glue = { "com/sample/tests/junit/kdt/steps" }
+        glue = { "com/sample/tests/junit/kdt/steps" },
+        tags = {"@test"}
 )
 public class BankingKDTTest {
 }
