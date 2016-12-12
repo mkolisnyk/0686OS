@@ -32,12 +32,12 @@ public class BankingKDTTest {
 	public static void farBefore() throws Exception {
 		String featurePath = "build/features";
 		Map<String, String> content = JiraUtils.getField("http://localhost:9090", "mkolisnyk", "password",
-				"project = Sample and type = Test and status != Done", "description");
+				"project = SAM AND type = Test AND status in (Done, Failed, Passed)", "description");
 		for (Entry<String, String> entry : content.entrySet()) {
 			System.out.println(entry.getKey());
 			System.out.println(entry.getValue());
 			String fileName = entry.getKey().replaceAll("(\\W+)", "_") + ".feature";
-			String result = "@gen" + System.lineSeparator() + entry.getValue();
+			String result = "@gen @" + entry.getKey().split(" ")[0] + System.lineSeparator() + entry.getValue();
 			File output = new File(featurePath + File.separator + fileName);
 			output.getParentFile().mkdirs();
 			FileUtils.writeStringToFile(new File(featurePath + File.separator + fileName), result, "UTF-8");

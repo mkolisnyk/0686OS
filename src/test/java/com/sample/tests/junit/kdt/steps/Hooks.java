@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.sample.framework.Configuration;
 import com.sample.framework.Context;
 import com.sample.framework.Driver;
+import com.sample.framework.utils.jira.JiraUtils;
 
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -30,7 +31,8 @@ public class Hooks {
         Driver.add(Configuration.get("browser"), cap);
     }
     @After
-    public void afterScenario(Scenario scenario) {
-        Driver.current().quit();
+    public void afterScenario(Scenario scenario) throws Exception {
+    	Driver.current().quit();
+  		JiraUtils.handleError("http://localhost:9090", "mkolisnyk", "password", scenario);
     }
 }
