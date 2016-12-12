@@ -1,5 +1,8 @@
-@test
 Feature: Bank user
+  @gen
+  Scenario: Empty scenario
+	Given the banking application has been started
+
   Scenario: Deposit money to account
     Given the banking application has been started
     And I am logged as the "Harry Potter" customer

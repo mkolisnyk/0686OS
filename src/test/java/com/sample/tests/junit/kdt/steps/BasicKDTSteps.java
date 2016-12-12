@@ -79,7 +79,7 @@ public class BasicKDTSteps {
     public void acceptAlert() {
         Driver.current().switchTo().alert().accept();
     }
-    @Then("^(?:I should see |)the \"(.*)\" text is shown$")
+    @Then("^(?:I should see |)the \"(.*)\" (?:text|label) is shown$")
     public void verifyTextPresent(String text) throws Exception {
         Assert.assertTrue("Unable to find text: '" + text + "'", Page.getCurrent().isTextPresent(text));
     }
