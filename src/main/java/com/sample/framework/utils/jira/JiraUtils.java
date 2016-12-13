@@ -1,6 +1,5 @@
 package com.sample.framework.utils.jira;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,15 +13,12 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import cucumber.api.Scenario;
@@ -73,19 +69,18 @@ public class JiraUtils {
         client.getConnectionManager().shutdown();
 		return content;
 	}
-
-	private static String getIssueIdForScenario(Scenario scenario) {
-		for(String tag : scenario.getSourceTagNames()) {
-			if (tag.contains("SAM-")) {
-				return tag.substring(1);
-			}
-		}
-		return null;
-	}
 	
 	public static void handleError(String url, String login, String password, Scenario scenario) throws Exception {
-		String issueId = getIssueIdForScenario(scenario);
-		
+		String issueId = "";
+		for(String tag : scenario.getSourceTagNames()) {
+			if (tag.contains("SAM-")) {
+				issueId = tag.substring(1);
+				break;
+			}
+		}
+		if (issueId.equals("")) {
+			return;
+		}
 		CredentialsProvider provider = new BasicCredentialsProvider();
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(login, password);
 		provider.setCredentials(AuthScope.ANY, credentials);
